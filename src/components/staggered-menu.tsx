@@ -350,7 +350,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
       {/* Menu Container */}
       <div
-        className={(className ? className + ' ' : '') + 'staggered-menu-wrapper fixed inset-0 w-screen h-screen'}
+        className={(className ? className + ' ' : '') + 'staggered-menu-wrapper fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden'}
         style={{
           zIndex: open ? 50 : 10,
           ...accentColor ? ({ ['--sm-accent' as any]: accentColor } as React.CSSProperties) : undefined
@@ -501,8 +501,8 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       </div>
 
       <style>{`
-.sm-scope { position: fixed; inset: 0; width: 100vw; height: 100vh; overflow: hidden; pointer-events: none; z-index: 40; }
-.staggered-menu-wrapper { position: fixed; inset: 0; width: 100vw; height: 100vh; overflow: hidden; }
+.sm-scope { position: fixed; inset: 0; width: 100vw; height: 100vh; overflow: hidden; pointer-events: auto; z-index: 40; }
+.staggered-menu-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; max-width: 100vw; }
 .staggered-menu-wrapper .staggered-menu-header { position: absolute; top: 0; left: 0; width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 2em; background: transparent; pointer-events: none; z-index: 20; }
 .staggered-menu-wrapper .staggered-menu-header > * { pointer-events: auto; }
 .staggered-menu-wrapper .sm-logo { display: flex; align-items: center; user-select: none; }
@@ -517,9 +517,9 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 .staggered-menu-wrapper .sm-panel-itemWrap { position: relative; overflow: hidden; line-height: 1; }
 .staggered-menu-wrapper .sm-icon-line { position: absolute; left: 50%; top: 50%; width: 100%; height: 2px; background: currentColor; border-radius: 2px; transform: translate(-50%, -50%); will-change: transform; }
 .staggered-menu-wrapper .sm-line { display: none !important; }
-.staggered-menu-wrapper .staggered-menu-panel { position: absolute; top: 0; right: 0; width: clamp(280px, 40vw, 480px); height: 100vh; background: white; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; flex-direction: column; padding: 6em 2em 2em 2em; overflow-y: auto; z-index: 10; box-sizing: border-box; }
+.staggered-menu-wrapper .staggered-menu-panel { position: absolute; top: 0; right: 0; width: clamp(280px, 40vw, 480px); max-width: 480px; height: 100vh; background: white; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; flex-direction: column; padding: 6em 2em 2em 2em; overflow-y: auto; z-index: 10; box-sizing: border-box; pointer-events: auto; }
 .staggered-menu-wrapper [data-position='left'] .staggered-menu-panel { right: auto; left: 0; }
-.staggered-menu-wrapper .sm-prelayers { position: absolute; top: 0; right: 0; bottom: 0; width: clamp(280px, 40vw, 480px); pointer-events: none; z-index: 5; }
+.staggered-menu-wrapper .sm-prelayers { position: absolute; top: 0; right: 0; bottom: 0; width: clamp(280px, 40vw, 480px); max-width: 480px; pointer-events: none; z-index: 5; }
 .staggered-menu-wrapper [data-position='left'] .sm-prelayers { right: auto; left: 0; }
 .staggered-menu-wrapper .sm-prelayer { position: absolute; top: 0; right: 0; height: 100%; width: 100%; transform: translateX(0); }
 .staggered-menu-wrapper .sm-panel-inner { flex: 1; display: flex; flex-direction: column; gap: 1.25rem; }
@@ -542,13 +542,13 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 .staggered-menu-wrapper .sm-panel-list[data-numbering] { counter-reset: smItem; }
 .staggered-menu-wrapper .sm-panel-list[data-numbering] .sm-panel-item::after { counter-increment: smItem; content: counter(smItem, decimal-leading-zero); position: absolute; top: 0.1em; right: 3.2em; font-size: 18px; font-weight: 400; color: var(--sm-accent, #423ACC); letter-spacing: 0; pointer-events: none; user-select: none; opacity: var(--sm-num-opacity, 0); }
 @media (max-width: 1024px) {
-  .staggered-menu-wrapper .staggered-menu-panel { width: 100vw; left: 0; right: 0; max-width: 100vw; }
-  .staggered-menu-wrapper .sm-prelayers { width: 100vw; max-width: 100vw; }
+  .staggered-menu-wrapper .staggered-menu-panel { width: 100%; left: 0; right: 0; max-width: 100%; }
+  .staggered-menu-wrapper .sm-prelayers { width: 100%; max-width: 100%; }
   .staggered-menu-wrapper[data-open] .sm-logo-img { filter: invert(100%); }
 }
 @media (max-width: 640px) {
-  .staggered-menu-wrapper .staggered-menu-panel { width: 100vw; left: 0; right: 0; max-width: 100vw; }
-  .staggered-menu-wrapper .sm-prelayers { width: 100vw; max-width: 100vw; }
+  .staggered-menu-wrapper .staggered-menu-panel { width: 100%; left: 0; right: 0; max-width: 100%; }
+  .staggered-menu-wrapper .sm-prelayers { width: 100%; max-width: 100%; }
   .staggered-menu-wrapper[data-open] .sm-logo-img { filter: invert(100%); }
 }
       `}</style>
