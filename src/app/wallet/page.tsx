@@ -4,27 +4,49 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount, useDisconnect } from 'wagmi';
 import Link from 'next/link';
 import StaggeredMenu from '@/components/staggered-menu';
+import { SignedIn, SignedOut, UserButton, SignInButton, useAuth } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { toast } from 'sonner';
 
 export default function WalletPage() {
   const { address, isConnected, chain } = useAccount();
   const { disconnect } = useDisconnect();
+  const { isSignedIn, isLoaded } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      toast.error('Authentication Required', {
+        description: 'Please sign in to access your wallet.',
+        duration: 4000,
+      });
+      router.push('/');
+    }
+  }, [isSignedIn, isLoaded, router]);
+
+  // Show loading state while checking authentication
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#423ACC] mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-300">Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirect if not authenticated
+  if (!isSignedIn) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
       {/* Staggered Menu with User Avatar */}
       <div className="absolute top-0 left-0 right-0 z-10 h-20">
-        <StaggeredMenu
-          items={[
-            { label: 'Home', ariaLabel: 'Go to Home', link: '/' },
-            { label: 'Connect Wallet', ariaLabel: 'Connect your wallet', link: '/wallet' },
-            { label: 'Order', ariaLabel: 'Create an order', link: '/orders' }
-          ]}
-          displaySocials={false}
-          accentColor="#423ACC"
-          menuButtonColor="#423ACC"
-          openMenuButtonColor="#423ACC"
-        />
-        {/* User Avatar in top right corner */}
+        {/* User Avatar in top right corner - positioned before menu */}
         <div className="absolute top-6 right-6 z-30">
           <SignedIn>
             <UserButton />
@@ -37,6 +59,18 @@ export default function WalletPage() {
             </SignInButton>
           </SignedOut>
         </div>
+
+        <StaggeredMenu
+          items={[
+            { label: 'Home', ariaLabel: 'Go to Home', link: '/' },
+            { label: 'Connect Wallet', ariaLabel: 'Connect your wallet', link: '/wallet' },
+            { label: 'Order', ariaLabel: 'Create an order', link: '/orders' }
+          ]}
+          displaySocials={false}
+          accentColor="#423ACC"
+          menuButtonColor="#423ACC"
+          openMenuButtonColor="#423ACC"
+        />
       </div>
 
       <div className="container mx-auto px-4 py-8 pt-20">

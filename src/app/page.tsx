@@ -1,30 +1,32 @@
 "use client";
 
 import { RetroGrid } from "@/components/magicui/retro-grid";
-import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { SignInButton, SignedIn, SignedOut, UserButton, useAuth } from '@clerk/nextjs';
 import Link from "next/link";
 import { motion } from "motion/react";
 import StaggeredMenu from "@/components/staggered-menu";
+import { useEffect } from 'react';
+import { toast } from 'sonner';
 
 export default function Home() {
+  const { isSignedIn, isLoaded } = useAuth();
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      toast.success('Welcome back!', {
+        description: 'You are now signed in and can access your wallet and orders.',
+        duration: 3000,
+      });
+    }
+  }, [isSignedIn, isLoaded]);
+
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-background">
       <RetroGrid />
 
       {/* Header with Staggered Menu and User Avatar */}
       <div className="absolute top-0 left-0 right-0 z-10 h-20">
-        <StaggeredMenu
-          items={[
-            { label: 'Home', ariaLabel: 'Go to Home', link: '/' },
-            { label: 'Connect Wallet', ariaLabel: 'Connect your wallet', link: '/wallet' },
-            { label: 'Order', ariaLabel: 'Create an order', link: '/orders' }
-          ]}
-          displaySocials={false}
-          accentColor="#423ACC"
-          menuButtonColor="#423ACC"
-          openMenuButtonColor="#423ACC"
-        />
-        {/* User Avatar in top right corner */}
+        {/* User Avatar in top right corner - positioned before menu */}
         <div className="absolute top-6 right-6 z-30">
           <SignedIn>
             <UserButton />
@@ -37,6 +39,18 @@ export default function Home() {
             </SignInButton>
           </SignedOut>
         </div>
+
+        <StaggeredMenu
+          items={[
+            { label: 'Home', ariaLabel: 'Go to Home', link: '/' },
+            { label: 'Connect Wallet', ariaLabel: 'Connect your wallet', link: '/wallet' },
+            { label: 'Order', ariaLabel: 'Create an order', link: '/orders' }
+          ]}
+          displaySocials={false}
+          accentColor="#423ACC"
+          menuButtonColor="#423ACC"
+          openMenuButtonColor="#423ACC"
+        />
       </div>
 
       {/* Main Content */}
