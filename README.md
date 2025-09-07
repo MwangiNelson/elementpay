@@ -29,7 +29,7 @@ A Next.js application that allows users to connect their wallets and create cryp
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/MwangiNelson/elementpay.git
 cd elementpay
 ```
 
